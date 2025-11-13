@@ -26,19 +26,24 @@ async def user_profile(_, message: Message):
                 Buttons.start_markup(hellbot.app.username)
             ),
         )
+
+    songs_played = user.get("songs_played", 0)
+    join_date = user.get("join_date")  # keep None if not set, or set default below
+
     context = {
         "id": message.from_user.id,
         "mention": message.from_user.mention,
-        "songs_played": user["songs_played"],
-        "join_date": user["join_date"],
+        "songs_played": songs_played,
+        "join_date": join_date,
         "user_type": await get_user_type(message.chat.id, message.from_user.id),
     }
+
     await message.reply_text(
         MusicUser.get_profile_text(context, hellbot.app.mention),
         reply_markup=InlineKeyboardMarkup(Buttons.close_markup()),
     )
 
-
+                
 @hellbot.app.on_message(filters.command("stats") & Config.SUDO_USERS)
 @UserWrapper
 async def stats(_, message: Message):
