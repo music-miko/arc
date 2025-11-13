@@ -12,9 +12,13 @@ class Config(object):
     BOT_TOKEN = getenv("BOT_TOKEN", None)              # get from @BotFather
     DATABASE_URL = getenv("DATABASE_URL", None)        # from https://cloud.mongodb.com/
     HELLBOT_SESSION = getenv("HELLBOT_SESSION", None)  # enter your session string here
-    LOGGER_ID = int(getenv("LOGGER_ID", 0))            # make a channel and get its ID
-    OWNER_ID = getenv("OWNER_ID", "")                  # enter your id here
+    LOGGER_ID = int(getenv("LOGGER_ID", ""))            # make a channel and get its ID
+    OWNER_ID = getenv("OWNER_ID", "6848223695")                  # enter your id here
+    API_URL = getenv("API_URL", 'https://api.thequickearn.xyz') #youtube song url
+    VIDEO_API_URL = getenv("VIDEO_API_URL", 'https://api.video.thequickearn.xyz')
+    API_KEY = getenv("API_KEY", "30DxNexGenBotse698a9") # youtube song api key, generate free key or buy paid plan from panel.thequickearn.xyz
 
+    
     # optional config variables
     BLACK_IMG = getenv("BLACK_IMG", "https://files.catbox.moe/jwc4b6.jpg")        # black image for progress
     BOT_NAME = getenv("BOT_NAME", "\x40\x4d\x75\x73\x69\x63\x5f\x48\x65\x6c\x6c\x42\x6f\x74")   # dont put fancy texts here.
