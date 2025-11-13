@@ -1,5 +1,4 @@
 from pyrogram import Client
-from pyrogram.errors import FloodWait
 
 from config import Config
 from Music.utils.exceptions import HellBotException
@@ -9,7 +8,6 @@ from .logger import LOGS
 
 class HellClient(Client):
     def __init__(self):
-        # Main bot client
         self.app = Client(
             "HellMusic",
             api_id=Config.API_ID,
@@ -19,63 +17,16 @@ class HellClient(Client):
             workers=100,
         )
 
-        # Assistant userbots (created here, started in .start())
-        self.user_bots = []
-
-        def _make_user(session_name: str, session_string: str) -> Client:
-            return Client(
-                session_name,
-                api_id=Config.API_ID,
-                api_hash=Config.API_HASH,
-                session_string=session_string,
-                no_updates=True,
-            )
-
-        # Assistant 1
-        self.user = None
-        if getattr(Config, "HELLBOT_SESSION", None):
-            self.user = _make_user("HellClient", Config.HELLBOT_SESSION)
-            self.user_bots.append(self.user)
-
-        # Assistant 2
-        self.user2 = None
-        if getattr(Config, "HELLBOT_SESSION2", None):
-            self.user2 = _make_user("HellClient2", Config.HELLBOT_SESSION2)
-            self.user_bots.append(self.user2)
-
-        # Assistant 3
-        self.user3 = None
-        if getattr(Config, "HELLBOT_SESSION3", None):
-            self.user3 = _make_user("HellClient3", Config.HELLBOT_SESSION3)
-            self.user_bots.append(self.user3)
-
-        # Assistant 4
-        self.user4 = None
-        if getattr(Config, "HELLBOT_SESSION4", None):
-            self.user4 = _make_user("HellClient4", Config.HELLBOT_SESSION4)
-            self.user_bots.append(self.user4)
-
-        # Info
-        self.assistants = []         # started assistants info
-        self.assistants_failed = []  # assistants that failed to start
-
-    async def _safe_notify_owner(self, text: str):
-        """Send log to LOGGER_ID but never crash on FloodWait."""
-        if not getattr(Config, "LOGGER_ID", None):
-            return
-        try:
-            await self.app.send_message(Config.LOGGER_ID, text)
-        except FloodWait as e:
-            LOGS.warning(
-                f"[LOGGER FloodWait] Need to wait {e.value} seconds when notifying owner. Skipping."
-            )
-        except Exception as e:
-            LOGS.error(f"[LOGGER Notify Error]: {e}")
+        self.user = Client(
+            "HellClient",
+            api_id=Config.API_ID,
+            api_hash=Config.API_HASH,
+            session_string=Config.HELLBOT_SESSION,
+            no_updates=True,
+        )
 
     async def start(self):
-        LOGS.info(">> Booting up HellMusic...")
-
-        # ─ Bot ─
+        LOGS.info("\x3e\x3e\x20\x42\x6f\x6f\x74\x69\x6e\x67\x20\x75\x70\x20\x48\x65\x6c\x6c\x4d\x75\x73\x69\x63\x2e\x2e\x2e")
         if Config.BOT_TOKEN:
             await self.app.start()
             me = await self.app.get_me()
@@ -83,59 +34,21 @@ class HellClient(Client):
             self.app.mention = me.mention
             self.app.name = me.first_name
             self.app.username = me.username
-            LOGS.info(f">> {self.app.name} is online now!")
-
-        # ─ Assistants ─
-        if self.user_bots:
-            for idx, userbot in enumerate(self.user_bots, start=1):
-                session_name = userbot.name or f"HellClient{idx}"
-                try:
-                    await userbot.start()
-                    me = await userbot.get_me()
-                    userbot.id = me.id
-                    userbot.mention = me.mention
-                    userbot.name = me.first_name
-                    userbot.username = me.username
-
-                    self.assistants.append(
-                        {
-                            "index": idx,
-                            "session": session_name,
-                            "id": me.id,
-                            "name": me.first_name,
-                            "username": me.username,
-                        }
-                    )
-
-                    # Auto-join channels – can be commented out if too spammy
-                    try:
-                        await userbot.join_chat("ArcUpdates")
-                        await userbot.join_chat("ArcChatz")
-                    except Exception:
-                        pass
-
-                    LOGS.info(
-                        f">> Assistant {idx} ({session_name}): {userbot.name} is online now!"
-                    )
-                except Exception as e:
-                    err_text = (
-                        f">> Failed to start assistant {idx} ({session_name}): {e}"
-                    )
-                    LOGS.error(err_text)
-                    self.assistants_failed.append(
-                        {
-                            "index": idx,
-                            "session": session_name,
-                            "error": str(e),
-                        }
-                    )
-                    # Tell you in LOGGER_ID which assistant failed
-                    await self._safe_notify_owner(err_text)
-
-        if not self.user_bots:
-            LOGS.warning(">> No assistant userbots started! Only main bot is running.")
-        else:
-            LOGS.info(f">> Booted up HellMusic with {len(self.user_bots)} assistant(s)!")
+            LOGS.info(f"\x3e\x3e\x20{self.app.name}\x20\x69\x73\x20\x6f\x6e\x6c\x69\x6e\x65\x20\x6e\x6f\x77\x21")
+        if Config.HELLBOT_SESSION:
+            await self.user.start()
+            me = await self.user.get_me()
+            self.user.id = me.id
+            self.user.mention = me.mention
+            self.user.name = me.first_name
+            self.user.username = me.username
+            try:
+                await self.user.join_chat("Its_HellBot")
+                await self.user.join_chat("https://t.me/joinchat/LUzuM9rrEdIwZTFl")
+            except:
+                pass
+            LOGS.info(f"\x3e\x3e\x20{self.user.name}\x20\x69\x73\x20\x6f\x6e\x6c\x69\x6e\x65\x20\x6e\x6f\x77\x21")
+        LOGS.info("\x3e\x3e\x20\x42\x6f\x6f\x74\x65\x64\x20\x75\x70\x20\x48\x65\x6c\x6c\x4d\x75\x73\x69\x63\x21")
 
     async def logit(self, hash: str, log: str, file: str = None):
         log_text = f"#{hash.upper()} \n\n{log}"
@@ -148,11 +61,6 @@ class HellClient(Client):
                 await self.app.send_message(
                     Config.LOGGER_ID, log_text, disable_web_page_preview=True
                 )
-        except FloodWait as e:
-            # Don’t kill bot on FloodWait; just warn
-            LOGS.warning(
-                f"[LOGGER FloodWait] Need to wait {e.value} seconds. Dropping this log."
-            )
         except Exception as e:
             raise HellBotException(f"[HellBotException]: {e}")
 
