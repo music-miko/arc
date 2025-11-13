@@ -14,7 +14,7 @@ from Music.utils.pages import MakePages
 from Music.utils.queue import Queue
 
 
-@hellbot.app.on_message(filters.command("active") & Config.SUDO_USERS)
+@hellbot.app.on_message(filters.command("ac") & Config.SUDO_USERS)
 @check_mode
 async def activevc(_, message: Message):
     hell = await message.reply_text(f"Getting active voice chats ...")
