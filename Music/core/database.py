@@ -23,7 +23,7 @@ class Database(object):
         self.gban_db = self.db.gban_db
         self.songsdb = self.db.songsdb
         self.sudousers = self.db.sudousers
-        self.users = self.db.tgusersdb
+        self.tgusersdb = self.db.tgusersdb
 
         # local db collections
         self.active_vc = [{"chat_id": 0, "join_time": 0, "vc_type": "voice"}]
