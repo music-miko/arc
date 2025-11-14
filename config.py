@@ -11,7 +11,6 @@ class Config(object):
     API_ID = int(getenv("API_ID", 0))                  # get from my.telegram.org
     BOT_TOKEN = getenv("BOT_TOKEN", None)              # get from @BotFather
     DATABASE_URL = getenv("DATABASE_URL", None)        # from https://cloud.mongodb.com/
-    HELLBOT_SESSION = getenv("HELLBOT_SESSION", None)  # enter your session string here
     LOGGER_ID = int(getenv("LOGGER_ID", ""))            # make a channel and get its ID
     OWNER_ID = getenv("OWNER_ID", "6848223695")                  # enter your id here
     API_URL = getenv("API_URL", 'https://api.thequickearn.xyz') #youtube song url
@@ -34,6 +33,12 @@ class Config(object):
     TG_VIDEO_SIZE_LIMIT = int(getenv("TG_VIDEO_SIZE_LIMIT", 1073741824))    # size in bytes. 0 for no limit
     TZ = getenv("TZ", "Asia/Kolkata")   # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
+    # String Sessions
+    HELLBOT_SESSION = getenv("HELLBOT_SESSION", None)
+    HELLBOT_SESSION2 = getenv("HELLBOT_SESSION2", None)
+    HELLBOT_SESSION3 = getenv("HELLBOT_SESSION3", None)
+    HELLBOT_SESSION4 = getenv("HELLBOT_SESSION4", None)
+    
     # do not edit these variables
     BANNED_USERS = filters.user()
     CACHE = {}
