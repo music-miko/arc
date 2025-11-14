@@ -1,3 +1,6 @@
+import uvloop
+uvloop.install()
+
 from pyrogram import Client
 
 from config import Config
