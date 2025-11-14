@@ -6,7 +6,7 @@ from Music.utils.exceptions import HellBotException
 from .logger import LOGS
 
 
-class HellClient(Client):
+class HellClient:
     def __init__(self):
         # Bot client
         self.app = Client(
